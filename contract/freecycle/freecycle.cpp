@@ -17,7 +17,8 @@ public:
  *------------------------------------------------------------------------------------------------*/
     freecycle(account_name self) :
     contract(self),
-    sitesettings(_self, _self) {}
+    sitesettings(_self, _self),
+    members(_self, _self) {}
 
 /**-----------------------------------------------------------------------------------------------
  * Store of site settings
@@ -28,7 +29,7 @@ public:
  *------------------------------------------------------------------------------------------------*/
 
     /// @abi action
-    void registersite(const account_name owner, const string sitename, const string geohash, const string settings) {
+    void registersite(const account_name owner, const string sitename, const string geohash, const string settings ) {
         require_auth(owner);
 
         // Quick check to remind the user the payload must be json.
@@ -76,8 +77,17 @@ public:
  *------------------------------------------------------------------------------------------------*/
 
     /// @abi action
-    void addproduct( account_name user ) {
-        print( "Hello, ", name{user} );
+    void productadd( account_name user ) {
+        print( "productadd : ", name{user} );
+    }
+
+/**-----------------------------------------------------------------------------------------------
+ * This is needed when supporting multiple sites, skip for now
+ *------------------------------------------------------------------------------------------------*/
+
+    /// @abi action
+    void prodselect( account_name user ) {
+        print( "prodselect : ", name{user} );
     }
 
 /**-----------------------------------------------------------------------------------------------
@@ -85,11 +95,75 @@ public:
  *------------------------------------------------------------------------------------------------*/
 
     /// @abi action
-    void selectprod( account_name user ) {
-        print( "Hello, ", name{user} );
+    void memberadd( account_name site, account_name owner, const string membername, const string settings ) {
+        require_auth(site);
+
+        // Quick check to remind the user the payload must be json.
+        eosio_assert(settings[0] == '{',             "payload must be json");
+        eosio_assert(settings[settings.size()-1] == '}', "payload must be json");
+
+        // If entry exists, update it.
+        auto target_itr = members.find(owner);
+        if (target_itr != members.end()) {
+            print( "Member ", name{owner}, " exists, updating" );
+            members.modify(target_itr, owner, [&](auto& j) {
+                j.owner = owner;
+                j.site = site;
+                j.name = membername;
+                j.settings = settings;
+            });
+        } else {  // Otherwise, create a new entry for it.
+            print( "Adding member ", name{owner} );
+            members.emplace(site, [&](auto& j) {
+                j.owner = owner;
+                j.site = site;
+                j.name = membername;
+                j.settings = settings;
+            });
+        }
     }
 
+/**-----------------------------------------------------------------------------------------------
+ *
+ *------------------------------------------------------------------------------------------------*/
 
+    /// @abi action
+    void memberdel( account_name site, account_name owner ) {
+        require_auth(site);
+
+        auto target_itr = members.find(owner);
+        eosio_assert(target_itr != members.end(), "Not a member from coop");
+
+        print( "Removing member ", name{owner} );
+        members.erase(target_itr);
+    }
+
+/**-----------------------------------------------------------------------------------------------
+ *
+ *------------------------------------------------------------------------------------------------*/
+
+    /// @abi action
+    void skipadd( account_name user ) {
+        print( "skipadd : ", name{user} );
+    }
+
+/**-----------------------------------------------------------------------------------------------
+ *
+ *------------------------------------------------------------------------------------------------*/
+
+    /// @abi action
+    void skipoffer( account_name user ) {
+        print( "skipoffer : ", name{user} );
+    }
+
+/**-----------------------------------------------------------------------------------------------
+ *
+ *------------------------------------------------------------------------------------------------*/
+
+    /// @abi action
+    void skipaccept( account_name user ) {
+        print( "skipaccept : ", name{user} );
+    }
 
 private:
 /**-----------------------------------------------------------------------------------------------
@@ -98,6 +172,13 @@ private:
  * directly off the blockchain - see https://en.wikipedia.org/wiki/Geohash
  *
  * Use strings, no index for now
+ *
+ * Encoding https://www.movable-type.co.uk/scripts/geohash.html
+ * Clubview
+ * -25.8390532,28.1797913
+ * kekj1 (3 characters probably better - see square on link above)
+ *
+ * cleos push action freecycle registersite '["testsite1","Test site 1","kekj1","{\"contact\":\"Sebokeng\",\"number\":\"0612345678\"}"]' -p testsite1@active
  *------------------------------------------------------------------------------------------------*/
 
     // @abi table sitesettings i64
@@ -112,6 +193,22 @@ private:
     };
     typedef eosio::multi_index<N(sitesettings), sitesettings> sitesettings_table;
     sitesettings_table sitesettings;
+
+/**-----------------------------------------------------------------------------------------------
+ *
+ *------------------------------------------------------------------------------------------------*/
+    // @abi table members i64
+    struct members {
+        account_name owner;
+        account_name site;
+        string       name;
+        string       settings;
+
+        auto primary_key() const {  return owner;  }
+        EOSLIB_SERIALIZE(members, (owner)(site)(name)(settings))
+    };
+    typedef eosio::multi_index<N(members), members> members_table;
+    members_table members;
 
 /**-----------------------------------------------------------------------------------------------
  *
@@ -141,7 +238,7 @@ private:
         constexpr static uint64_t key = N(sequence);
         uint64_t value = 1;
     };
-    
+
 };
 
-EOSIO_ABI( freecycle, (registersite)(unregsite)(addproduct)(selectprod) )
+EOSIO_ABI( freecycle, (registersite)(unregsite)(productadd)(prodselect)(memberadd)(memberdel)(skipadd)(skipoffer)(skipaccept) )
