@@ -2,7 +2,7 @@
 
 ## Smart contract
 
-All notes on smart contract in EOS.md
+All notes on smart contract in contract/EOS.md
 
 ## Front end
 
