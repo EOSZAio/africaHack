@@ -7,15 +7,20 @@ import { CardSection } from './common';
 
 class SelectProductListItem extends Component {
   onRowPress() {
-    this.props.transactionChange({ prop: 'product_uid', value: this.props.product.uid });
-    this.props.transactionChange({ prop: 'product_name', value: this.props.product.name });
-    this.props.transactionChange({ prop: 'product_image', value: this.props.product.image });
-    this.props.transactionChange({ prop: 'product_price', value: this.props.product.price });
+    const { uid, name, settings, price } = this.props.product;
+    const { image } = JSON.parse(settings);
+
+    this.props.transactionChange({ prop: 'product_uid', value: uid });
+    this.props.transactionChange({ prop: 'product_name', value: name });
+    this.props.transactionChange({ prop: 'product_image', value: image });
+    this.props.transactionChange({ prop: 'product_price', value: price });
     Actions.transactionForm({ product: this.props.product });
   }
 
   render() {
-    const { name, image } = this.props.product;
+    const { name, settings } = this.props.product;
+    const { image } = JSON.parse(settings);
+    
     const  {
       thumbnailContainerStyle,
       thumbnailStyle,

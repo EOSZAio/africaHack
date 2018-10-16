@@ -16,13 +16,14 @@ class PickerListItem extends Component {
 
     this.props.settingsFetch();
     //this.props.pickerGetBalance({ account: this.props.picker.account });
-    const { uid, name, settings, account } = this.props.picker;
-    const { image } = JSON.parse(settings);;
+    const { uid, name, settings, owner, site } = this.props.picker;
+    const { image } = JSON.parse(settings);
 
     this.props.transactionChange({ prop: 'picker_uid', value: uid });
+    this.props.transactionChange({ prop: 'site_name', value: site });
     this.props.transactionChange({ prop: 'picker_name', value: name });
     this.props.transactionChange({ prop: 'picker_image', value: image });
-    this.props.transactionChange({ prop: 'picker_account', value: account });
+    this.props.transactionChange({ prop: 'picker_account', value: owner });
     Actions.selectProductList();
   }
 

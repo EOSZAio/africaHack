@@ -25,7 +25,6 @@ export default (state = INITIAL_STATE, action) => {
       return INITIAL_STATE;
 
     case PICKER_SAVE_SUCCESS:
-//      return INITIAL_STATE;
       return state;
 
     default:

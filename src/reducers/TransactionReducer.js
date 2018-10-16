@@ -25,7 +25,6 @@ export default (state = INITIAL_STATE, action) => {
 
   switch (action.type) {
     case TRANSACTION_CHANGE:
-      console.log('====>>>> SettingsReducer.TRANSACTION_CHANGE', state, action);
       return { ...state, [action.payload.prop]: action.payload.value };
 
     default:

@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 import {Image, Text, View} from 'react-native';
 import { connect } from 'react-redux';
-import {transactionChange} from '../actions';
+import {transactionChange, } from '../actions';
 import {Button, Card, CardSection, Input} from "./common";
 import {Actions} from "react-native-router-flux";
 import _ from "lodash";
+import { transaction } from '../utils/eosjs-client';
 
 class TransactionForm extends Component {
 
   componentWillMount() {
-    _.each(this.props.transaction, (value, prop) => {
+   /* _.each(this.props.transaction, (value, prop) => {
       this.props.pickerChange({ prop, value });
     });
 
-//    console.log('=====> TransactionForm.componentWillMount', this.props);
+    console.log('=====> TransactionForm.componentWillMount', this.state);*/
   }
 
-  onContinuePress() {
+ /* onContinuePress() {
     const { quantity, product_price } = this.props;
     const product_value = (quantity && product_price ? quantity * product_price : 0.00).toFixed(2);
 
@@ -26,6 +27,40 @@ class TransactionForm extends Component {
 //    console.log('=====> TransactionForm.onContinuePress', this.props);
 
     Actions.skipList();
+  }*/
+
+  addToSkip(){
+    const data = {
+      site: this.props.site_name,
+      member: this.props.picker_account,
+      productid: this.props.product_uid,
+      newbatch: 0,
+      weight: this.props.quantity
+    };
+
+    transaction("testsite1", "batchadd", data).then( result => {
+      console.log("yay", result);
+    })
+    .catch(error => {
+      console.log("aww", error);
+    });
+  }
+
+  newSkip() {
+    const data = {
+      site: this.props.site_name,
+      member: this.props.picker_account,
+      productid: this.props.product_uid,
+      newbatch: 1,
+      weight: this.props.quantity
+    };
+
+    transaction("testsite1", "batchadd", data).then( result => {
+      console.log("yay", result);
+    })
+    .catch(error => {
+      console.log("aww", error);
+    });
   }
 
   render() {
@@ -80,8 +115,14 @@ class TransactionForm extends Component {
         </CardSection>
 
         <CardSection>
-          <Button onPress={this.onContinuePress.bind(this)}>
-            Continue
+          <Button onPress={this.addToSkip.bind(this)}>
+            Add to skip
+          </Button>
+        </CardSection>
+        
+        <CardSection>
+          <Button onPress={this.newSkip.bind(this)}>
+            New skip
           </Button>
         </CardSection>
       </Card>
@@ -112,10 +153,10 @@ const styles = {
 };
 
 const mapStateToProps = (state) => {
-  const { picker_name, picker_image, product_name, product_image, quantity, product_price } = state.transaction;
+  const { picker_name, picker_image, product_name, product_image, quantity, product_price, picker_account, product_uid, site_name } = state.transaction;
   console.log('=====> TransactionForm.mapStateToProps', state);
 
-  return { picker_name, picker_image, product_name, product_image, quantity, product_price };
+  return { picker_name, picker_image, product_name, product_image, quantity, product_price, picker_account, product_uid, site_name };
 };
 
 export default connect(mapStateToProps, { transactionChange })(TransactionForm);
