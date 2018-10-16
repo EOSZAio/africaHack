@@ -25,3 +25,4 @@ export const SKIPS_FETCH_SUCCESS = 'skips_fetch_success';
 export const SKIP_SAVE_SUCCESS = 'skip_save_success';
 
 export const TRANSACTION_CHANGE = 'transaction_change';
+export const TRANSACTION_SUCCESS = 'transaction_success';

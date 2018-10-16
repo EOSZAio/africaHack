@@ -1,4 +1,4 @@
-import {TRANSACTION_CHANGE} from "../actions/types";
+import {TRANSACTION_CHANGE, TRANSACTION_SUCCESS} from "../actions/types";
 
 const INITIAL_STATE = {
   site_uid: '',
@@ -26,6 +26,9 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case TRANSACTION_CHANGE:
       return { ...state, [action.payload.prop]: action.payload.value };
+
+    case TRANSACTION_SUCCESS:
+      return INITIAL_STATE;
 
     default:
       return state;

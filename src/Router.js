@@ -9,11 +9,26 @@ import SkipList from "./components/SkipList";
 import SkipForm from "./components/SkipForm";
 import TransactionForm from "./components/TransactionForm";
 import TransactionDoneForm from "./components/TransactionDoneForm";
-import Trader1 from "./components/Trader1";
+import ConfirmationForm from "./components/ConfirmationForm";
 import Trader2 from "./components/Trader2";
 import Trader3 from "./components/Trader3";
 
 const RouterComponent = () => {
+
+  /*const renderBackButton = () => {
+    return (
+        <TouchableOpacity
+            onPress={() => {}}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Image
+                    source={require('../assets/images/icons/arrow-left-@x3.png')}
+                    resizeMode={'contain'}/>
+                <Text>Back</Text>
+            </View>
+        </TouchableOpacity>
+    );
+};*/
+
   return (
     <Router>
       <Scene key="root" hideNavBar >
@@ -80,6 +95,13 @@ const RouterComponent = () => {
             key="transactionDoneForm"
             component={TransactionDoneForm}
             title="Complete"
+          />
+
+          <Scene 
+            key="confirmationForm"
+            component={ConfirmationForm}
+            title="Confirmed"
+            left={() => (null)}
           />
 
           {/*<Scene

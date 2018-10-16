@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Image, Text, View} from 'react-native';
 import { connect } from 'react-redux';
-import {transactionChange, } from '../actions';
+import {transactionChange, transactionSuccess} from '../actions';
 import {Button, Card, CardSection, Input} from "./common";
 import {Actions} from "react-native-router-flux";
 import _ from "lodash";
@@ -30,16 +30,19 @@ class TransactionForm extends Component {
   }*/
 
   addToSkip(){
+    const { site_name, picker_account, product_uid, quantity, product_image, product_name, picker_name, picker_image } = this.props;
     const data = {
-      site: this.props.site_name,
-      member: this.props.picker_account,
-      productid: this.props.product_uid,
+      site: site_name,
+      member: picker_account,
+      productid: product_uid,
       newbatch: 0,
-      weight: this.props.quantity
+      weight: quantity
     };
 
     transaction("testsite1", "batchadd", data).then( result => {
       console.log("yay", result);
+      this.props.transactionSuccess();
+      Actions.confirmationForm({ ...data, product_image, product_name, picker_name, picker_image });
     })
     .catch(error => {
       console.log("aww", error);
@@ -57,6 +60,8 @@ class TransactionForm extends Component {
 
     transaction("testsite1", "batchadd", data).then( result => {
       console.log("yay", result);
+      this.props.transactionSuccess();
+      Actions.confirmationForm({data: this.props });
     })
     .catch(error => {
       console.log("aww", error);
@@ -159,4 +164,4 @@ const mapStateToProps = (state) => {
   return { picker_name, picker_image, product_name, product_image, quantity, product_price, picker_account, product_uid, site_name };
 };
 
-export default connect(mapStateToProps, { transactionChange })(TransactionForm);
+export default connect(mapStateToProps, { transactionChange, transactionSuccess })(TransactionForm);
