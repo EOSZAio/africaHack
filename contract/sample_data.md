@@ -132,11 +132,11 @@ cleos push action freecycle productdel '[3]' -p freecycle@active
 cleos push action freecycle productdel '[4]' -p freecycle@active
 cleos push action freecycle productdel '[5]' -p freecycle@active
 
-cleos push action freecycle productadd '[1,"Clear plastic (PET)","{\"image\":\"https://dev.mytribez.com/images/clear-plastic-3.jpg\"}", 1]' -p freecycle@active
-cleos push action freecycle productadd '[2,"Coloured Plastic","{\"image\":\"https://dev.mytribez.com/images/colored-plastic.jpg\"}", 2]' -p freecycle@active
-cleos push action freecycle productadd '[3,"Paper","{\"image\":\"https://dev.mytribez.com/images/paper.jpg\"}", 3]' -p freecycle@active
-cleos push action freecycle productadd '[4,"Metal","{\"image\":\"https://dev.mytribez.com/images/cans.jpg\"}", 4]' -p freecycle@active
-cleos push action freecycle productadd '[5,"Glass","{\"image\":\"https://dev.mytribez.com/images/glass.jpg\"}", 5]' -p freecycle@active
+cleos push action freecycle productadd '[1,"Clear plastic (PET)","{\"image\":\"https://dev.mytribez.com/images/clear-plastic-3.jpg\"}"]' -p testsite1@active
+cleos push action freecycle productadd '[2,"Coloured Plastic","{\"image\":\"https://dev.mytribez.com/images/colored-plastic.jpg\"}"]' -p testsite1@active
+cleos push action freecycle productadd '[3,"Paper","{\"image\":\"https://dev.mytribez.com/images/paper.jpg\"}"]' -p testsite1@active
+cleos push action freecycle productadd '[4,"Metal","{\"image\":\"https://dev.mytribez.com/images/cans.jpg\"}"]' -p testsite1@active
+cleos push action freecycle productadd '[5,"Glass","{\"image\":\"https://dev.mytribez.com/images/glass.jpg\"}"]' -p testsite1@active
 ```
 
 ```bash
