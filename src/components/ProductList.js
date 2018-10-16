@@ -30,6 +30,7 @@ const mapStateToProps = state => {
     const product = { ...val, uid };
     return product;
   });
+  console.log("products:", JSON.stringify(products));
   return { products };
 };
 

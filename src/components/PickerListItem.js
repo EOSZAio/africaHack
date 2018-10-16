@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, TouchableWithoutFeedback, View, Image } from 'react-native';
 
 import { connect } from 'react-redux';
-import { pickerChange, settingsFetch, pickerGetBalance } from '../actions';
+import { pickerChange, settingsFetch, pickerGetBalance, transactionChange } from '../actions';
 
 import { Actions } from 'react-native-router-flux';
 import { CardSection } from './common';
@@ -15,13 +15,21 @@ class PickerListItem extends Component {
     });
 
     this.props.settingsFetch();
-    this.props.pickerGetBalance({ account: this.props.picker.account });
+    //this.props.pickerGetBalance({ account: this.props.picker.account });
+    const { uid, name, settings, account } = this.props.picker;
+    const { image } = JSON.parse(settings);;
 
-    Actions.pickerSummary({ picker: this.props.picker });
+    this.props.transactionChange({ prop: 'picker_uid', value: uid });
+    this.props.transactionChange({ prop: 'picker_name', value: name });
+    this.props.transactionChange({ prop: 'picker_image', value: image });
+    this.props.transactionChange({ prop: 'picker_account', value: account });
+    Actions.selectProductList();
   }
 
   render() {
-    const { name, image } = this.props.picker;
+    const { name, settings } = this.props.picker;
+    const { image } = JSON.parse(settings);
+    
     const  {
       thumbnailContainerStyle,
       thumbnailStyle,
@@ -71,4 +79,4 @@ const styles = {
   }
 };
 
-export default connect(null, { pickerChange, settingsFetch, pickerGetBalance })(PickerListItem);
+export default connect(null, { pickerChange, settingsFetch, pickerGetBalance, transactionChange })(PickerListItem);

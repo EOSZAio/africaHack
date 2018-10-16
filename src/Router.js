@@ -45,11 +45,11 @@ const RouterComponent = () => {
             key="pickerList"
             component={PickerList}
             title="Pickers"
-            rightTitle="Add"
+            //rightTitle="Add"
             onRight={() => Actions.pickerCreate()}
           />
 
-          <Scene
+          {/*<Scene
             key="pickerCreate"
             component={PickerCreate}
             title="Add Picker"
@@ -65,7 +65,7 @@ const RouterComponent = () => {
             key="pickerEdit"
             component={PickerEdit}
             title="Edit Picker"
-          />
+          />*/
 
           <Scene
             key="productList"
@@ -75,7 +75,7 @@ const RouterComponent = () => {
             onRight={() => Actions.productCreate()}
           />
 
-          <Scene
+          {/*<Scene
             key="productCreate"
             component={ProductCreate}
             title="Add Product"
@@ -91,7 +91,7 @@ const RouterComponent = () => {
             key="settingsForm"
             component={SettingsForm}
             title="Settings"
-          />
+          />*/}
 
           <Scene
             key="selectProductList"

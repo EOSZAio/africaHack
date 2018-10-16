@@ -6,6 +6,7 @@ import {
   PRODUCTS_FETCH_SUCCESS,
   PRODUCT_SAVE_SUCCESS
 } from './types';
+import { getTableData } from '../utils/eosjs-client';
 
 export const productChange = ({ prop, value }) => {
   return {
@@ -28,13 +29,21 @@ export const productCreate = ({ name, image, price }) => {
 };
 
 export const productsFetch = () => {
-  const { currentUser } = firebase.auth();
+  //const { currentUser } = firebase.auth();
 
-  return (dispatch) => {
+  /*return (dispatch) => {
     firebase.database().ref(`/users/${currentUser.uid}/products`)
       .on('value', snapshot => {
         dispatch({ type: PRODUCTS_FETCH_SUCCESS, payload: snapshot.val() });
       });
+  };*/
+  return (dispatch) => {
+    getTableData("freecycle", "freecycle", "products").then( result =>{
+      console.log("bc: ", result);
+      dispatch({ type: PRODUCTS_FETCH_SUCCESS, payload: result.rows });
+    }).catch(err => {
+      console.log("data",err);
+    });;
   };
 };
 
