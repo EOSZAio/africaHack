@@ -44,7 +44,7 @@ const RouterComponent = () => {
           <Scene
             key="homeForm"
             component={HomeForm}
-            title="EOS ZA"
+            title="Ukuchuma"
             initial
             left={() => (null)}
           />
