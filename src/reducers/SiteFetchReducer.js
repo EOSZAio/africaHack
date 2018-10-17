@@ -1,14 +1,13 @@
 import {
-  SKIPS_FETCH_SUCCESS
+  SITES_FETCH_SUCCESS
 } from '../actions/types';
 
 const INITIAL_STATE = {};
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case SKIPS_FETCH_SUCCESS:
+    case SITES_FETCH_SUCCESS:
       return action.payload;
-
     default:
       return state;
   }

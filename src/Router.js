@@ -3,15 +3,14 @@ import { Scene, Router, Actions } from 'react-native-router-flux';
 import LoginForm from './components/LoginForm';
 import HomeForm from "./components/HomeForm";
 import PickerList from "./components/PickerList";
-import ProductList from "./components/ProductList";
+import TraderProductList from "./components/TraderProductList";
 import SelectProductList from "./components/SelectProductList";
 import SkipList from "./components/SkipList";
 import SkipForm from "./components/SkipForm";
 import TransactionForm from "./components/TransactionForm";
 import TransactionDoneForm from "./components/TransactionDoneForm";
 import ConfirmationForm from "./components/ConfirmationForm";
-import Trader2 from "./components/Trader2";
-import Trader3 from "./components/Trader3";
+import SiteList from './components/SiteList';
 
 const RouterComponent = () => {
 
@@ -58,11 +57,11 @@ const RouterComponent = () => {
           />
 
           <Scene
-            key="productList"
-            component={ProductList}
+            key="traderProductList"
+            component={TraderProductList}
             title="Products"
-            rightTitle="Add"
-            onRight={() => Actions.productCreate()}
+            //rightTitle="Add"
+            //onRight={() => Actions.productCreate()}
           />
 
           <Scene
@@ -70,6 +69,13 @@ const RouterComponent = () => {
             component={SelectProductList}
             title="Products"
           />
+
+          <Scene
+            key="siteList"
+            component={SiteList}
+            title="Sites"
+          />
+
 
           <Scene
             key="skipList"

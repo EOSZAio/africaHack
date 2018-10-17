@@ -3,15 +3,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FlatList } from 'react-native';
 import { productsFetch } from '../actions';
-import ProductListItem from './ProductListItem';
+import TraderProductListItem from './TraderProductListItem';
 
-class ProductList extends Component {
+class TraderProductList extends Component {
   componentWillMount() {
     this.props.productsFetch();
   }
 
   renderRow(product) {
-    return <ProductListItem product={product.item} />;
+    return <TraderProductListItem product={product.item} />;
   }
 
   render() {
@@ -34,4 +34,4 @@ const mapStateToProps = state => {
   return { products };
 };
 
-export default connect(mapStateToProps, { productsFetch })(ProductList);
+export default connect(mapStateToProps, { productsFetch })(TraderProductList);

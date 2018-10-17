@@ -8,6 +8,7 @@ import SettingsReducer from './SettingsReducer';
 import SkipReducer from './SkipReducer';
 import SkipFetchReducer from './SkipFetchReducer';
 import TransactionReducer from './TransactionReducer';
+import SiteFetchReducer from './SiteFetchReducer';
 
 export default combineReducers({
   auth: AuthReducer,
@@ -18,5 +19,6 @@ export default combineReducers({
   settings: SettingsReducer,
   skip: SkipReducer,
   skips: SkipFetchReducer,
-  transaction: TransactionReducer
+  transaction: TransactionReducer,
+  sites: SiteFetchReducer
 });

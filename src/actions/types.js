@@ -26,3 +26,5 @@ export const SKIP_SAVE_SUCCESS = 'skip_save_success';
 
 export const TRANSACTION_CHANGE = 'transaction_change';
 export const TRANSACTION_SUCCESS = 'transaction_success';
+
+export const SITES_FETCH_SUCCESS = 'sites_fetch_success';

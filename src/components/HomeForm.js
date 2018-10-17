@@ -5,7 +5,7 @@ import {Actions} from "react-native-router-flux";
 class HomeForm extends Component {
   onTraderPress() {
     console.log('onTraderPress');
-    Actions.trader1();
+    Actions.traderProductList();
   }
 
   onLogoutPress() {

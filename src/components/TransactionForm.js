@@ -38,7 +38,7 @@ class TransactionForm extends Component {
       newbatch: 0,
       weight: quantity
     };
-
+    console.log("data to add:", data);
     transaction("testsite1", "batchadd", data).then( result => {
       console.log("yay", result);
       this.props.transactionSuccess();

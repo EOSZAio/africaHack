@@ -3,13 +3,17 @@ import {Image, Text, TouchableWithoutFeedback, View} from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { CardSection } from './common';
 
-class ProductListItem extends Component {
+class TraderProductListItem extends Component {
   onRowPress() {
-    Actions.productEdit({ product: this.props.product });
+    //Actions.productEdit({ product: this.props.product });
+    Actions.siteList({ product: this.props.product })
   }
 
   render() {
-    const { name, image } = this.props.product;
+    //const { name, image } = this.props.product;
+    const { uid, name, settings, price } = this.props.product;
+    const { image } = JSON.parse(settings);
+
     const  {
       thumbnailContainerStyle,
       thumbnailStyle,
@@ -59,4 +63,4 @@ const styles = {
   }
 };
 
-export default ProductListItem;
+export default TraderProductListItem;
