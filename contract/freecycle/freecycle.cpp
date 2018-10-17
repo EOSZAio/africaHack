@@ -7,7 +7,6 @@
 using std::string;
 using namespace eosio;
 
-
 class freecycle : public contract {
 public:
 //    using contract::contract;
@@ -337,7 +336,7 @@ public:
         }
     }
 
-        void process_batch_shares(account_name site, uint64_t batchid) {
+    void process_batch_shares(account_name site, uint64_t batchid) {
         batcheshares_table batcheshares(_self, batchid);
 
         // Member's share
@@ -347,7 +346,8 @@ public:
             // Add member's share
             membershare_add(site, b.member, b.weight);
 
-            // SKIPPED : member share record
+            // member share record
+            batchshrdel( batchid, b.member );  // XXXX : Comment out during dev to prevent loosing state
         }
     }
 
@@ -368,7 +368,8 @@ public:
             // Need to do this in a separate routine, each batch has it's own scope
             process_batch_shares(site, batch.batchid);
 
-            // SKIPPED : Remove batch record
+            // Remove batch record
+            batchdel( batch.batchid );  // XXXX : Comment out during dev to prevent loosing state
         }
 
         // Distribute income
