@@ -21,7 +21,8 @@ public:
     products(_self, _self), // TODO : Production, handle multiple sites
     batches(_self, _self),
 //    batcheshares(_self, _self),
-    members(_self, _self) {}
+    members(_self, _self),
+    membershare(_self, _self) {}
 
 /**-----------------------------------------------------------------------------------------------
  * Store of site settings
@@ -299,20 +300,89 @@ public:
     }
 
 /**-----------------------------------------------------------------------------------------------
- *
+ * Simplified process here
+ * 1. Itterate through available batches till all batches of quantity satisfied
+ *   - deduct quantity from total required
+ *   - Itterate through batch shares
+ *     - add member's share in transaction to temporary record
+ *     - (remove batch share records to free memory, don't do this in demo else we have to repopulate structure)
+ *   - (remove batch records to free memory, don't do this in demo else we have to repopulate structure)
+ *   - Reduce available stock
+ * 2. Distribute income to members based on their contribution
+ *   - Token transfer from traider to member.
  *------------------------------------------------------------------------------------------------*/
+
+    void membershare_delete( account_name member ) {
+        auto target_itr = membershare.find(member);
+        if (target_itr != membershare.end()) {
+//            print( "Removing member share for ", name{member} );
+//            membershare.erase(target_itr); // Delete failing
+        }
+    }
+
+    void membershare_add( account_name site, account_name member, const double weight ) {
+        auto target_itr = membershare.find(member);
+
+        if (target_itr != membershare.end()) {
+//            print( "Add member (", name{member}, " , ", weight, ") " );
+            membershare.modify(target_itr, site, [&](auto& j) {
+                j.weight += weight;
+            });
+        } else {  // Otherwise, create a new entry for it.
+            membershare.emplace(site, [&]( auto& j ) {
+//                print( "Update member (", name{member}, " , ", weight, ") " );
+                j.member = member;
+                j.weight = weight;
+            });
+        }
+    }
+
+        void process_batch_shares(account_name site, uint64_t batchid) {
+        batcheshares_table batcheshares(_self, batchid);
+
+        // Member's share
+        for (auto& b : batcheshares) {
+//            print( ", process_batch_shares : (", name{b.member}, ", ", b.weight, ") " );
+
+            // Add member's share
+            membershare_add(site, b.member, b.weight);
+
+            // SKIPPED : member share record
+        }
+    }
 
     /// @abi action
     void batchoffer( account_name traider, account_name site, uint64_t productid, const double weight, const double offer_price  ) {
-        print( "batchoffer (", name{traider}, ", ", name{site}, ", ", productid, ", ", weight, ", ", offer_price );
-        /*
-         * We will shortcut process for demo. This action must
-         * 1. Match batches to quantity required
-         * 2. Distribute income to members based on their contribution
-         * 3. Delete batches
-         * 4. Delete batch shares
-         * 5. Reduce total stock
-         */
+
+        // Clear member share table (ugly but it works!)
+        for (auto& m : membershare) {
+            membershare_delete(m.member);
+        }
+
+        // Batches
+        for (auto& batch : batches) {
+//            print( ", batchoffer : (", batch.batchid, ", ", batch.weight, ") " );
+
+            // SKIPPED : reduce site stock
+
+            // Need to do this in a separate routine, each batch has it's own scope
+            process_batch_shares(site, batch.batchid);
+
+            // SKIPPED : Remove batch record
+        }
+
+        // Distribute income
+        for (auto& m : membershare) {
+            print( ", Dist : (", m.weight, " / ", weight, ", " );
+
+            // Tokens to member
+//            action(
+//                    permission_level{get_self(),N(active)},
+//                    get_self(),
+//                    N(notify),
+//                    std::make_tuple(user, name{user}.to_string() + " " + message)
+//            ).send();
+//        }
     }
 
 /**-----------------------------------------------------------------------------------------------
@@ -388,6 +458,20 @@ private:
     };
     typedef eosio::multi_index<N(members), members> members_table;
     members_table members;
+
+/**-----------------------------------------------------------------------------------------------
+ *
+ *------------------------------------------------------------------------------------------------*/
+    // @abi table membershare i64
+    struct membershare {
+        account_name member;
+        double       weight;
+
+        auto primary_key() const {  return member;  }
+        EOSLIB_SERIALIZE(membershare, (member)(weight))
+    };
+    typedef eosio::multi_index<N(membershare), membershare> membershare_table;
+    membershare_table membershare;
 
 /**-----------------------------------------------------------------------------------------------
  *

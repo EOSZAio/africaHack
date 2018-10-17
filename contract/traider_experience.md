@@ -100,3 +100,7 @@ cleos get table freecycle freecycle sitesettings
 ```bash
 cleos push action freecycle batchoffer '["traider1","testsite1",1,2500,3000.0]' -p testsite1@active
 ```
+
+```bash
+cleos get table freecycle freecycle membershare
+```
