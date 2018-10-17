@@ -41,7 +41,7 @@ class SiteList extends Component {
             </View>
             <View style={conentStyle}>
               <Text style={titleStyle}>{name}</Text>
-              {/*<Text style={titleStyle}>{weight}kg</Text>*/}
+              <Text style={titleStyle}>{weight}kg</Text>
             </View>
           </CardSection>
         </Card>

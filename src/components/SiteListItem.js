@@ -16,8 +16,7 @@ owner: "testsite1"
 settings: "{"contact":"Sebokeng","number":"0612345678"}"
 sitename: "Test site 1"
 */
-    const { weight, owner, settings, sitename } = this.props.site;
-    const { contact, number } = JSON.parse(settings);
+    const { owner, sitename } = this.props.site;
 
     const  {
       thumbnailContainerStyle,
@@ -39,7 +38,7 @@ sitename: "Test site 1"
             <View style={conentStyle}>
               <Text style={titleStyle}>{sitename}</Text>
               <Text style={titleStyle}>{owner}</Text>
-              <Text style={titleStyle}>{weight}kg</Text>
+              {/*<Text style={titleStyle}>{weight}kg</Text>*/}
             </View>
           </CardSection>
         </View>

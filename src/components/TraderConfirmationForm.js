@@ -41,7 +41,7 @@ class TraderConfirmationForm extends Component {
         <CardSection>
         <View style={cardSectionStyle}>
             <Text style={titleStyle}>Weight bought: {weight}kg</Text>
-            <Text style={titleStyle}>Price paid R {offer_price}</Text>
+            <Text style={titleStyle}>Price paid: R {offer_price}</Text>
           </View>
         </CardSection>
 
