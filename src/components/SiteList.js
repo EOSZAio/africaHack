@@ -2,14 +2,14 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, FlatList, Image, Text } from 'react-native';
-import { sitesFetch } from '../actions';
+import { sitesFetch, transactionChange } from '../actions';
 import { Card, CardSection } from './common';
 import SiteListItem from './SiteListItem';
 
 class SiteList extends Component {
   componentWillMount() {
     this.props.sitesFetch();
-    console.log("sitelist", this.props);
+    this.props.transactionChange({ prop: 'product', value: this.props.product });
   }
 
   renderRow(site) {
@@ -17,8 +17,11 @@ class SiteList extends Component {
   }
 
   render() {
-    const { name, settings } = this.props.product;
+    const { name, settings, current_weight } = this.props.product;
     const { image } = JSON.parse(settings);
+    let weight = 0.00;
+    weight = parseFloat(current_weight).toFixed(2);
+    
     const  {
       thumbnailContainerStyle,
       thumbnailStyle,
@@ -38,6 +41,7 @@ class SiteList extends Component {
             </View>
             <View style={conentStyle}>
               <Text style={titleStyle}>{name}</Text>
+              {/*<Text style={titleStyle}>{weight}kg</Text>*/}
             </View>
           </CardSection>
         </Card>
@@ -76,12 +80,12 @@ const styles = {
 };
 
 const mapStateToProps = state => {
+  const { product } = state.transaction;
   const sites = _.map(state.sites, (val, uid ) => {
-    const site = { ...val, uid };
+    const site = { ...val, uid, product };
     return site;
   });
-  console.log("sites:", JSON.stringify(sites));
   return { sites };
 };
 
-export default connect(mapStateToProps, { sitesFetch })(SiteList);
+export default connect(mapStateToProps, { sitesFetch, transactionChange })(SiteList);

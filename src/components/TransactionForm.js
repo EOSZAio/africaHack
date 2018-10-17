@@ -9,26 +9,6 @@ import { transaction } from '../utils/eosjs-client';
 
 class TransactionForm extends Component {
 
-  componentWillMount() {
-   /* _.each(this.props.transaction, (value, prop) => {
-      this.props.pickerChange({ prop, value });
-    });
-
-    console.log('=====> TransactionForm.componentWillMount', this.state);*/
-  }
-
- /* onContinuePress() {
-    const { quantity, product_price } = this.props;
-    const product_value = (quantity && product_price ? quantity * product_price : 0.00).toFixed(2);
-
-    this.props.transactionChange({ prop: 'quantity', value: quantity });
-    this.props.transactionChange({ prop: 'product_value', value: product_value });
-
-//    console.log('=====> TransactionForm.onContinuePress', this.props);
-
-    Actions.skipList();
-  }*/
-
   addToSkip(){
     const { site_name, picker_account, product_uid, quantity, product_image, product_name, picker_name, picker_image } = this.props;
     const data = {
@@ -70,7 +50,7 @@ class TransactionForm extends Component {
 
   render() {
     const { picker_name, picker_image, product_name, product_image, quantity, product_price } = this.props;
-    const product_value = (quantity && product_price ? quantity * product_price : 0.00).toFixed(2);
+    //const product_value = (quantity && product_price ? quantity * product_price : 0.00).toFixed(2);
     const  {
       thumbnailContainerStyle,
       thumbnailStyle,
@@ -111,12 +91,6 @@ class TransactionForm extends Component {
             value={quantity}
             onChangeText={value => this.props.transactionChange({ prop: 'quantity', value })}
           />
-        </CardSection>
-
-        <CardSection>
-          <Text style={styles.titleStyle}>
-            ${product_value}
-          </Text>
         </CardSection>
 
         <CardSection>

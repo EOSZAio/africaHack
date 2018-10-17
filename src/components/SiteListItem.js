@@ -5,7 +5,7 @@ import { CardSection } from './common';
 
 class SiteListItem extends Component {
   onRowPress() {
-    //Actions.productEdit({ product: this.props.product });
+    Actions.orderForm({ site: this.props.site });
   }
 
   render() {
@@ -16,7 +16,7 @@ owner: "testsite1"
 settings: "{"contact":"Sebokeng","number":"0612345678"}"
 sitename: "Test site 1"
 */
-    const { geohash, owner, settings, sitename } = this.props.site;
+    const { weight, owner, settings, sitename } = this.props.site;
     const { contact, number } = JSON.parse(settings);
 
     const  {
@@ -39,6 +39,7 @@ sitename: "Test site 1"
             <View style={conentStyle}>
               <Text style={titleStyle}>{sitename}</Text>
               <Text style={titleStyle}>{owner}</Text>
+              <Text style={titleStyle}>{weight}kg</Text>
             </View>
           </CardSection>
         </View>

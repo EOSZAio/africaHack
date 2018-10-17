@@ -5,12 +5,12 @@ import HomeForm from "./components/HomeForm";
 import PickerList from "./components/PickerList";
 import TraderProductList from "./components/TraderProductList";
 import SelectProductList from "./components/SelectProductList";
-import SkipList from "./components/SkipList";
-import SkipForm from "./components/SkipForm";
 import TransactionForm from "./components/TransactionForm";
 import TransactionDoneForm from "./components/TransactionDoneForm";
 import ConfirmationForm from "./components/ConfirmationForm";
+import TraderConfirmationForm from "./components/TraderConfirmationForm";
 import SiteList from './components/SiteList';
+import OrderForm from './components/OrderForm';
 
 const RouterComponent = () => {
 
@@ -76,21 +76,6 @@ const RouterComponent = () => {
             title="Sites"
           />
 
-
-          <Scene
-            key="skipList"
-            component={SkipList}
-            title="Skips"
-            rightTitle="Add"
-            onRight={() => Actions.skipForm()}
-          />
-
-          <Scene
-            key="skipForm"
-            component={SkipForm}
-            title="Add Skip"
-          />
-
           <Scene
             key="transactionForm"
             component={TransactionForm}
@@ -108,6 +93,19 @@ const RouterComponent = () => {
             component={ConfirmationForm}
             title="Confirmed"
             left={() => (null)}
+          />
+
+           <Scene 
+            key="traderConfirmationForm"
+            component={TraderConfirmationForm}
+            title="Confirmed"
+            left={() => (null)}
+          />
+
+          <Scene 
+            key="orderForm"
+            component={OrderForm}
+            title="Order"
           />
 
           {/*<Scene
