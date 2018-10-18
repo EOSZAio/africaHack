@@ -17,7 +17,7 @@ public:
     freecycle(account_name self) :
     contract(self),
     sitesettings(_self, _self),
-    products(_self, _self), // TODO : Production, handle multiple sites
+    products(_self, _self), // TODO : Production, handle multiple sites using a global and site specific table
     batches(_self, _self),
 //    batcheshares(_self, _self),
     members(_self, _self),
@@ -119,7 +119,7 @@ public:
     }
 
 /**-----------------------------------------------------------------------------------------------
- * XXXX : Just here for development, will be removed later
+ * TODO : Just here for development (removing unwanted data), will be removed later
  *------------------------------------------------------------------------------------------------*/
 
     /// @abi action
@@ -238,7 +238,7 @@ public:
 
 
 /**-----------------------------------------------------------------------------------------------
- * XXXX : Just here for development, will be removed later
+ * TODO : Just here for development (removing unwanted data), will be removed later
  *------------------------------------------------------------------------------------------------*/
 
     /// @abi action
@@ -283,7 +283,7 @@ public:
     }
 
 /**-----------------------------------------------------------------------------------------------
- * XXXX : Just here for development, will be removed later
+ * TODO : Just here for development (removing unwanted data), will be removed later
  *------------------------------------------------------------------------------------------------*/
 
     /// @abi action
@@ -315,7 +315,7 @@ public:
         auto target_itr = membershare.find(member);
         if (target_itr != membershare.end()) {
 //            print( "Removing member share for ", name{member} );
-//            membershare.erase(target_itr); // Delete failing
+            membershare.erase(target_itr); // TODO : Delete failing (probably messed up permissions)
         }
     }
 
@@ -347,7 +347,7 @@ public:
             membershare_add(site, b.member, b.weight);
 
             // member share record
-            batchshrdel( batchid, b.member );  // XXXX : Comment out during dev to prevent loosing state
+            batchshrdel( batchid, b.member );  // TODO : Comment out during dev to prevent loosing state
         }
     }
 
@@ -360,30 +360,54 @@ public:
         }
 
         // Batches
+        auto w = weight;
         for (auto& batch : batches) {
 //            print( ", batchoffer : (", batch.batchid, ", ", batch.weight, ") " );
-
-            // SKIPPED : reduce site stock
+//            print( ", (need:", w, ", found:", batch.weight, ") " );
+            if (batch.weight > w) break;
+            w -= batch.weight;
 
             // Need to do this in a separate routine, each batch has it's own scope
             process_batch_shares(site, batch.batchid);
 
             // Remove batch record
-            batchdel( batch.batchid );  // XXXX : Comment out during dev to prevent loosing state
+            batchdel( batch.batchid );  // TODO : Comment out during dev to prevent loosing state
         }
+
+        // Stock found ?
+        auto matched = weight-w;
+        eosio_assert(matched > 0.0, "Insufficient stock");
+//        print( ", matched ", weight-w, "kg of ", weight, "kg) " );
+
+        // Adjust site stock
+        auto product = products.find(productid);
+        eosio_assert(product != products.end(), "Error in business rules");
+//        print("Product ", productid, " found, updating");
+        products.modify(product, _self, [&](auto &j) {
+//            print( ", reducing ", j.current_weight, "kg by ", weight, "kg) " );
+            j.current_weight -= matched;  // TODO : Comment out during dev to prevent loosing state
+        });
 
         // Distribute income
         for (auto& m : membershare) {
             print( ", Dist : (", m.weight, " / ", weight, ", " );
 
-            // Tokens to member
-//            action(
-//                    permission_level{get_self(),N(active)},
-//                    get_self(),
-//                    N(notify),
-//                    std::make_tuple(user, name{user}.to_string() + " " + message)
-//            ).send();
-//        }
+            // Tokens from traider to member
+            /*
+            INLINE_ACTION_SENDER(eosio::token, transfer)( N(eosio.token), {payer,N(active)},
+                                                          { payer, N(eosio.ram), quant_after_fee, std::string("buy ram") } );
+            action(
+                    permission_level{get_self(),N(active)},
+                    get_self(),
+                    N(notify),
+                    std::make_tuple(user, name{user}.to_string() + " " + message)
+            ).send();
+             */
+
+//            INLINE_ACTION_SENDER(eosio::token, transfer)( N(eosio.token), {payer,N(active)},
+//                                                          { payer, N(eosio.ram), quant_after_fee, std::string("buy ram") } );
+
+        }
     }
 
 /**-----------------------------------------------------------------------------------------------
