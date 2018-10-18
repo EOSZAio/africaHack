@@ -314,7 +314,6 @@ public:
     void membershare_delete( account_name member ) {
         auto target_itr = membershare.find(member);
         if (target_itr != membershare.end()) {
-//            print( "Removing member share for ", name{member} );
             membershare.erase(target_itr); // TODO : Delete failing (probably messed up permissions)
         }
     }
@@ -323,13 +322,11 @@ public:
         auto target_itr = membershare.find(member);
 
         if (target_itr != membershare.end()) {
-//            print( "Add member (", name{member}, " , ", weight, ") " );
             membershare.modify(target_itr, site, [&](auto& j) {
                 j.weight += weight;
             });
         } else {  // Otherwise, create a new entry for it.
             membershare.emplace(site, [&]( auto& j ) {
-//                print( "Update member (", name{member}, " , ", weight, ") " );
                 j.member = member;
                 j.weight = weight;
             });
@@ -341,7 +338,6 @@ public:
 
         // Member's share
         for (auto& b : batcheshares) {
-//            print( ", process_batch_shares : (", name{b.member}, ", ", b.weight, ") " );
 
             // Add member's share
             membershare_add(site, b.member, b.weight);
@@ -362,8 +358,6 @@ public:
         // Batches
         auto w = weight;
         for (auto& batch : batches) {
-//            print( ", batchoffer : (", batch.batchid, ", ", batch.weight, ") " );
-//            print( ", (need:", w, ", found:", batch.weight, ") " );
             if (batch.weight > w) break;
             w -= batch.weight;
 
@@ -377,36 +371,26 @@ public:
         // Stock found ?
         auto matched = weight-w;
         eosio_assert(matched > 0.0, "Insufficient stock");
-//        print( ", matched ", weight-w, "kg of ", weight, "kg) " );
 
         // Adjust site stock
         auto product = products.find(productid);
         eosio_assert(product != products.end(), "Error in business rules");
-//        print("Product ", productid, " found, updating");
         products.modify(product, _self, [&](auto &j) {
-//            print( ", reducing ", j.current_weight, "kg by ", weight, "kg) " );
             j.current_weight -= matched;  // TODO : Comment out during dev to prevent loosing state
         });
 
         // Distribute income
+        double price;
         for (auto& m : membershare) {
             print( ", Dist : (", m.weight, " / ", weight, ", " );
 
             // Tokens from traider to member
-            /*
-            INLINE_ACTION_SENDER(eosio::token, transfer)( N(eosio.token), {payer,N(active)},
-                                                          { payer, N(eosio.ram), quant_after_fee, std::string("buy ram") } );
-            action(
-                    permission_level{get_self(),N(active)},
-                    get_self(),
-                    N(notify),
-                    std::make_tuple(user, name{user}.to_string() + " " + message)
-            ).send();
-             */
-
-//            INLINE_ACTION_SENDER(eosio::token, transfer)( N(eosio.token), {payer,N(active)},
-//                                                          { payer, N(eosio.ram), quant_after_fee, std::string("buy ram") } );
-
+            price = m.weight/weight*offer_price;
+            // Can't get this working. Just included to capture business logic. Some business process rework required
+//            INLINE_ACTION_SENDER(zar.token, transfer)(
+//                    N(zar.token),
+//                    {traider, N(active)},
+//                    {traider, member, price, "Could be informative to user or machine readable for use by app"});
         }
     }
 
