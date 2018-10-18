@@ -8,4 +8,8 @@
 * conteact/freecycle/ : 
 
 ## Front end
+* src/
+* Developed in react-native
+* eosjs for blockchain comms
+
 
